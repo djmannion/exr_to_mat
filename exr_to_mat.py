@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+"""
+Script to convert EXR files to Matlab MAT files.
+
+E.g.: exr_to_mat.py *.exr
+
+Can use `--output_dir` to specify where to save the MAT files.
+"""
+
 import argparse
 import pathlib
 
@@ -54,9 +62,7 @@ def convert_file(exr_filename, output_filename):
 
     img = read_exr(exr_path=str(exr_filename))
 
-    scipy.io.savemat(
-        file_name=output_filename, mdict={"img": img}
-    )
+    scipy.io.savemat(file_name=output_filename, mdict={"img": img})
 
 
 def read_exr(exr_path, squeeze=True, channel_order=None):
