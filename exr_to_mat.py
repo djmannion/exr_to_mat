@@ -7,7 +7,6 @@ import numpy as np
 import scipy.io
 
 import OpenEXR
-import Imath
 
 
 def run():
@@ -20,9 +19,7 @@ def run():
 
     args = parser.parse_args()
 
-    convert_files(
-        exr_filenames=args.exr_filenames, output_dir=args.output_dir
-    )
+    convert_files(exr_filenames=args.exr_filenames, output_dir=args.output_dir)
 
 
 def convert_files(exr_filenames, output_dir):
@@ -58,8 +55,7 @@ def convert_file(exr_filename, output_filename):
     img = read_exr(exr_path=str(exr_filename))
 
     scipy.io.savemat(
-        file_name=output_filename,
-        mdict={"img": img},
+        file_name=output_filename, mdict={"img": img}
     )
 
 
