@@ -14,7 +14,19 @@ import pathlib
 import numpy as np
 import scipy.io
 
-import OpenEXR
+try:
+    import OpenEXR
+    has_openexr = True
+except ImportError:
+    has_openexr = False
+
+if not has_openexr:
+    try:
+        import mitsuba
+        mitsuba.set_variant("scalar_rgb")
+        has_mitsuba = True
+    except ImportError:
+        has_mitsuba = False
 
 
 def run():
@@ -60,12 +72,24 @@ def convert_files(exr_filenames, output_dir):
 
 def convert_file(exr_filename, output_filename):
 
-    img = read_exr(exr_path=str(exr_filename))
+    if has_openexr:
+        img = read_exr_openexr(exr_path=str(exr_filename))
+    elif has_mitsuba:
+        img = read_exr_mitsuba(exr_path=str(exr_filename))
+    else:
+        print("No method of reading EXR files available")
 
     scipy.io.savemat(file_name=output_filename, mdict={"img": img})
 
 
-def read_exr(exr_path, squeeze=True, channel_order=None):
+def read_exr_mitsuba(exr_path):
+
+    img = mitsuba.core.Bitmap(exr_path)
+
+    return np.array(img)
+
+
+def read_exr_openexr(exr_path, squeeze=True, channel_order=None):
     """Read an EXR file and return a numpy array.
 
     Parameters
