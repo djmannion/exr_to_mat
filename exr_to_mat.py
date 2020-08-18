@@ -16,6 +16,7 @@ import scipy.io
 
 try:
     import OpenEXR
+
     has_openexr = True
 except ImportError:
     has_openexr = False
@@ -23,6 +24,7 @@ except ImportError:
 if not has_openexr:
     try:
         import mitsuba
+
         mitsuba.set_variant("scalar_rgb")
         has_mitsuba = True
     except ImportError:
